@@ -149,4 +149,6 @@ COPY --from=pre-builder /app/.git_sha /app/.git_sha
 
 WORKDIR /app
 
+RUN bundle check
+
 EXPOSE 3000
