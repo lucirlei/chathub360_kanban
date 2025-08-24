@@ -8,7 +8,7 @@ module Stacklab
     def self.get_license_info(force_refresh: false)
       {
         token_provided: true,
-        plan: 'enterprise', # Simula um plano de alto nível.
+        plan: 'stacklab pro', # Simula um plano de alto nível.
         features: {
           kanban_pro: true,
           stacklab_modules: true,
