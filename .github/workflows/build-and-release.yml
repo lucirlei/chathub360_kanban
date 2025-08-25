@@ -26,18 +26,17 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Log in to Docker Hub
+      - name: Login to DockerHub
+        if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
         uses: docker/login-action@v3
         with:
-          registry: ${{ env.REGISTRY }}
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Get latest tag
         id: get_latest_tag
         run: |
-          # Busca a tag mais recente no formato v*.*.* 
-          LATEST_TAG=$(git tag -l "v*.*.*" | sort -V | tail -n1)
+          # Busca a tag mais recente no formato v*.*.* LATEST_TAG=$(git tag -l "v*.*.*" | sort -V | tail -n1)
           
           # Se não houver tags, começa com v2.7.6 (será incrementada para v2.7.7)
           if [ -z "$LATEST_TAG" ]; then
@@ -116,23 +115,4 @@ jobs:
           echo "$CHANGELOG" >> changelog.md
           
           # Converte quebras de linha para o formato do GitHub
-          CHANGELOG_ESCAPED=$(cat changelog.md | sed ':a;N;$!ba;s/\n/%0A/g')
-          echo "changelog=$CHANGELOG_ESCAPED" >> $GITHUB_OUTPUT
-
-      - name: Create GitHub Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.next_version.outputs.new_version }}
-          release_name: Release ${{ steps.next_version.outputs.new_version }}
-          body: ${{ steps.changelog.outputs.changelog }}
-          draft: false
-          prerelease: false
-
-      - name: Summary
-        run: |
-          echo "✅ Successfully built and released version ${{ steps.next_version.outputs.new_version }}"
-          echo "🐳 Docker image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest"
-          echo "🐳 Docker image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.next_version.outputs.new_version }}"
-          echo "🏷️  Git tag: ${{ steps.next_version.outputs.new_version }}"
+          CHANGELOG_ESCAPED=$(cat changelog.md | sed ':a;N;$
