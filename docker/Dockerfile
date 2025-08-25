@@ -33,9 +33,11 @@ RUN apk update && apk add --no-cache \
   postgresql-client \
   git \
   curl \
+  yaml-dev \
   xz \
   && mkdir -p /var/app \
   && gem install bundler
+
 
 COPY --from=node /usr/local/bin/node /usr/local/bin/
 COPY --from=node /usr/local/lib/node_modules /usr/local/lib/node_modules
