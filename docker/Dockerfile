@@ -33,6 +33,8 @@ RUN apk update && apk add --no-cache \
   postgresql-client \
   git \
   curl \
+  libyaml-dev \
+  libyaml \
   xz \
   && mkdir -p /var/app \
   && gem install bundler
@@ -128,6 +130,7 @@ RUN apk update && apk add --no-cache \
   imagemagick \
   git \
   vips \
+  libyaml \
   && gem install bundler
 
 COPY --from=node /usr/local/bin/node /usr/local/bin/
