@@ -115,4 +115,5 @@ jobs:
           echo "$CHANGELOG" >> changelog.md
           
           # Converte quebras de linha para o formato do GitHub
-          CHANGELOG_ESCAPED=$(cat changelog.md | sed ':a;N;$
+          CHANGELOG_ESCAPED=$(cat changelog.md | sed ':a;N;$!ba;s/\n/%0A/g')
+          echo "changelog=$CHANGELOG_ESCAPED" >> "$GITHUB_OUTPUT"
