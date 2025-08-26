@@ -72,7 +72,6 @@ RUN if [ "$RAILS_ENV" = "production" ]; then \
   bundle config set without 'development test'; bundle install -j 4 -r 3; \
   else bundle install -j 4 -r 3; \
   fi
-
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --ignore-scripts
 
